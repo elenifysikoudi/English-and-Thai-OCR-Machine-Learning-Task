@@ -23,14 +23,16 @@ def collect_from_folder(language, font, dpi, directory, images):
             if str(dpi) in root and path_parts[-1] == font:
                 ocr_number = path_parts[language_idx + 1 ]
                 for file in files:
-                    images.append((os.path.join(root,file), ocr_number))
+                    if file.endswith('.bmp'):
+                        images.append((os.path.join(root,file), ocr_number))
         if font == "all" : 
             if str(dpi) in root:
                 path_parts = root.split(os.sep)
                 language_idx = path_parts.index(language)
                 ocr_number = path_parts[language_idx + 1 ]
                 for file in files:
-                    images.append((os.path.join(root,file), ocr_number))
+                    if file.endswith('.bmp'):
+                        images.append((os.path.join(root,file), ocr_number))
 
 
 def split_data(train_language, train_font, train_dpi, directory, test_language, test_font, test_dpi):
