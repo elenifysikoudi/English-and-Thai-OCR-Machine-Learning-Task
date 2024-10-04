@@ -6,27 +6,28 @@ import random
 parser = argparse.ArgumentParser(description='Split data into train, validation and test files.')
 parser.add_argument("train_language", type=str, help="The options are English, Thai, or both for what the training data will be.")
 parser.add_argument("train_font", type=str, help="The options are normal, bold, bold_italic, italic, or all for what the training data will be.")
-parser.add_argument("train_dpi", type=int, help="The options are 200 or 400 for what the training data will be.")
+parser.add_argument("train_dpi", type=str, help="The options are 200, 300, 400 or all for what the training data will be.")
 parser.add_argument("directory", default="none",help = "The path of the dataset /scratch/lt2326-2926-h24/ThaiOCR/ThaiOCR-TrainigSet .")
 parser.add_argument("--test_language", type=str, default="none", help="The options are English, Thai, or both for what the testing data will be.")
 parser.add_argument("--test_font", type=str, default="none",help="The options are normal, bold, bold_italic, italic, or all for what the testing data will be.")
-parser.add_argument("--test_dpi", type=str, default="none",help="The options are 200 or 400 for what the testing data will be.")
+parser.add_argument("--test_dpi", type=str, default="none",help="The options are 200, 300, 400 or all for what the testing data will be.")
 args = parser.parse_args()
 
 def collect_from_folder(language, font, dpi, directory, images):
     lang_dir = os.path.join(directory,language)
     walking = os.walk(lang_dir)
+    dpi_options = ["200", "300", "400"] if dpi == "all" else [str(dpi)]
     for root,_,files in walking:
         if font != "all":
             path_parts = root.split(os.sep)
             language_idx = path_parts.index(language)
-            if str(dpi) in root and path_parts[-1] == font:
+            if any(d in root for d in dpi_options) and path_parts[-1] == font:
                 ocr_number = path_parts[language_idx + 1 ]
                 for file in files:
                     if file.endswith('.bmp'):
                         images.append((os.path.join(root,file), ocr_number))
         if font == "all" : 
-            if str(dpi) in root:
+           if any(d in root for d in dpi_options):
                 path_parts = root.split(os.sep)
                 language_idx = path_parts.index(language)
                 ocr_number = path_parts[language_idx + 1 ]
