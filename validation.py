@@ -26,7 +26,7 @@ def validation_model(device='cuda:1'):
     model = OCRModel(num_classes)  
     model.to(device)
 
-    model.load_state_dict(torch.load('ocr_model.pth', map_location=device, weights_only=True)))
+    model.load_state_dict(torch.load('ocr_model.pth', map_location=device, weights_only=True))
     
     model.eval()
     all_preds = []
