@@ -5,9 +5,9 @@ The order of running the scripts is :
     There are 4 mandatory arguments and 3 optional in the following order : 
         Train language which is a string and can be English, Thai or both. 
         Train font which is a string and can be normal, bold, bold_italic, italic, or all. 
-        Train dpi the resolution of the image which is an integer and can be 200,300, or 400. 
+        Train dpi the resolution of the image which is an integer and can be 200,300, or 400 or all. 
         The last mandatory argument is the directory where the data is which I provide in the help information as well.
-        The optional arguments are useful for when the train and testing data are different. 
+        The optional arguments are useful for when the train and testing data are different and the options for those are the same. 
         In order to use the optional arguments they need to be called
         explicitly as --test_language --test_font --test_dpi and the argument of each which are the same.
     e.g. Same data for training and testing : python3 data_split_script.py English normal 200 /scratch/lt2326-2926-h24/ThaiOCR/ThaiOCR-TrainigSet
@@ -26,17 +26,17 @@ The order of running the scripts is :
     There is one mandatory argument :
         batch_size which can be an integer it should be the same as training.
     There is also an optional argument:
-        show errors that was added to do the qualitative error analysis
+        show errors that was added to do the qualitative error analysis.
 
 Challenges and Design decisions:
     The biggest challenge was making the splitting data script as it had to incorporate a lot of different choices and there were
-    issues like dealing with bold and bold_italic which were chosen together a lot of times and then having different train and test data options.
+    issues like dealing with bold and bold_italic which were often wrongfully chosen together and having different train and test data options.
     The second biggest challenge was dealing with the images. Data manipulation and finding a good padding, resizing ratio was a challenge.
     Initially, I wanted to dynamically choose the target size depending on the max width and height of each resolution and font style
-    but that would mean having more parameters that would also affect the model layers because of max pooling mostly (some numbers can't be
+    but that would mean having more parameters that would also affect the model layers because of max pooling for example (some numbers can't be
     divided by 2 twice for example). So I decided to simplify my logic and choose a middle ground target size of 60,60 
-    while adding white padding around the image and resizing in the cases that the images are bigger. I would like to try to change this
-    in the future but right now I left it as is. The model has 2 convolutional layers each coming wih a non-linear layer and max pooling.
+    while adding white padding around the image and resizing in the cases where the images are bigger. I would like to try to change this
+    in the future but as for now I left it as is. The model has 2 convolutional layers each coming with a non-linear layer and max pooling.
     There is also dropout and batch normalization to prevent overfitting.
 
 Experiments : 
